@@ -43,8 +43,11 @@ class ShaderProgram
         void SetUniform(std::string name, const int value);
 
 
-        // Get attribute location
+        // Get attribute locations
         GLint GetAttributeLocation(std::string attributeName);
+
+        // Get uniform locations
+        GLint GetUniformLocation(std::string uniformName);
 
         GLuint GetID()
         {

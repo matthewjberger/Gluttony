@@ -198,7 +198,7 @@ void ShaderProgram::SetUniform(string name, const mat4 matrix)
 void ShaderProgram::SetUniform(string name, int* values, int count)
 {
     int location = glGetUniformLocation(programID, name.c_str());
-    glUniform1iv(location, 1, values);
+    glUniform1iv(location, count, values);
 }
 
 void ShaderProgram::SetUniform(string name, const int value)
@@ -213,3 +213,8 @@ GLint ShaderProgram::GetAttributeLocation(std::string attributeName)
     return location;
 }
 
+GLint ShaderProgram::GetUniformLocation(std::string uniformName)
+{
+    GLint location = glGetUniformLocation(programID, const_cast<const char*>(uniformName.c_str()));
+    return location;
+}
