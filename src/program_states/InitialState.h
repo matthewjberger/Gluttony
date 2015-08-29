@@ -1,4 +1,4 @@
-#include "GlutProgram.h"
+#include "../core/GlutProgram.h"
 
 class InitialState : public ProgramState
 {

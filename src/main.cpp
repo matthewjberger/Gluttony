@@ -1,5 +1,5 @@
-#include "GlutProgram.h"
-#include "InitialState.h"
+#include "core/GlutProgram.h"
+#include "program_states/InitialState.h"
 
 int main(int argc, char **argv)
 {

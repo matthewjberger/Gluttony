@@ -7,17 +7,30 @@ LIBS= -lglut -lGLEW -lGL
 #LIBS=  -framework OpenGL -framework GLUT -framework Cocoa -lGLEW -stdlib=libc++
 # Assuming you want to use a recent compiler
 
-# Executable file name
+# Executable file name and directory
 EXE= ../bin/Gluttony
 
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x
 
-# Source Files
-OBJS= ../src/*.cpp
+# Source directory
+SRC_DIR=../src
+
+# Find all source files
+SRC= $(shell find $(SRC_DIR) -name *.cpp)
+
+# Convert all source files to object files
+OBJ = $(SRC:%.cpp=%.o)
 
 all: $(EXE)
 
-$(EXE): $(OBJS)
-	$(CC) $(CXXFLAGS) $(OBJS) -o $(EXE) $(LIBS)
+$(EXE): $(OBJ)
+	$(CC) $(OBJ) -o $(EXE) $(LIBS) && make clean
 
+%.o: %.cpp
+	g++ -c $(CXXFLAGS) $< -o $@
+
+clean:
+	rm $(SRC_DIR)/*.o
+	rm $(SRC_DIR)/core/*.o
+	rm $(SRC_DIR)/program_states/*.o
