@@ -2,6 +2,10 @@
 #define __GLUT_PROGRAM_H
 
 #include "GlobalIncludes.h"
+#include "Shader.h"
+#include "ShaderProgram.h"
+#include "VAO.h"
+#include "VBO.h"
 
 #include <iostream>
 #include <vector>
