@@ -202,4 +202,11 @@ void GlutProgram::Run()
     glutMainLoop();
 }
 
+float GlutProgram::GetAspectRatio()
+{
+    // Prevent division by 0
+    float adjustedScreenHeight = screenHeight;
+    if(screenHeight == 0) adjustedScreenHeight = 1;
+    return (float(screenWidth)/float(adjustedScreenHeight));
+}
 

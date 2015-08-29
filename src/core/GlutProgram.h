@@ -53,6 +53,7 @@ class GlutProgram
         int  GetScreenWidth();
         void SetScreenHeight(int h);
         int  GetScreenHeight();
+        float GetAspectRatio();
 
         // Program States
         std::vector<ProgramState *> ProgramStates;
