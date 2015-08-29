@@ -42,6 +42,10 @@ class ShaderProgram
         void SetUniform(std::string name, int* values, int count=1);
         void SetUniform(std::string name, const int value);
 
+
+        // Get attribute location
+        GLint GetAttributeLocation(std::string attributeName);
+
         GLuint GetID()
         {
             return programID;

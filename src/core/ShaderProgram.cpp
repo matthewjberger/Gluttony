@@ -206,3 +206,10 @@ void ShaderProgram::SetUniform(string name, const int value)
     int location = glGetUniformLocation(programID, name.c_str());
     glUniform1i(location, value);
 }
+
+GLint ShaderProgram::GetAttributeLocation(std::string attributeName)
+{
+    GLint location = glGetAttribLocation(programID, const_cast<const char*>(attributeName.c_str()));
+    return location;
+}
+
