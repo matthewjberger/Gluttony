@@ -35,7 +35,7 @@ class GlutProgram
         // Default flags set up a double buffered window with a depth buffer
         bool Initialize( int argc = 0, char **argv = NULL, int width = 640, int height = 480, int flags = GLUT_DOUBLE | GLUT_DEPTH, std::string windowTitle = "OpenGL Program");
         bool LoadContent(ProgramState* initialState);
-        void Quit();
+        void Quit(std::string message = "");
 
         // GLUT callbacks
         void Keyboard(unsigned char key, int xPos, int yPos);

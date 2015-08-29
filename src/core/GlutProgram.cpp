@@ -74,8 +74,11 @@ bool GlutProgram::LoadContent(ProgramState* initialState)
     return true;
 }
 
-void GlutProgram::Quit()
+void GlutProgram::Quit(string message)
 {
+    if(message != "")
+        std::cerr << message << std::endl;
+
     // Release program resources and close libraries
     if(!ProgramStates.empty())
     {
