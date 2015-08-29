@@ -7,14 +7,17 @@ LIBS= -lglut -lGLEW -lGL
 #LIBS=  -framework OpenGL -framework GLUT -framework Cocoa -lGLEW -stdlib=libc++
 # Assuming you want to use a recent compiler
 
+# Executable file name
+EXE= ../bin/Gluttony
+
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x
 
 # Source Files
 OBJS= ../src/*.cpp
 
-all: ../bin/Matrix
+all: $(EXE)
 
-../bin/Matrix: ../src/main.cpp
-	$(CC) $(CXXFLAGS) $(OBJS) -o ../bin/Matrix $(LIBS)
+$(EXE): $(OBJS)
+	$(CC) $(CXXFLAGS) $(OBJS) -o $(EXE) $(LIBS)
 

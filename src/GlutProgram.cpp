@@ -107,7 +107,7 @@ void GlutProgram::ChangeState(ProgramState *state)
 {
     // If there is a state already on the stack,
     // clean it up and pop it off the stack
-    if(ProgramStates.empty())
+    if(!ProgramStates.empty())
     {
         ProgramStates.back()->Finalize();
         ProgramStates.pop_back();
@@ -127,7 +127,7 @@ void GlutProgram::DestroyInstance()
 
 void GlutProgram::Keyboard(unsigned char key, int xPos, int yPos)
 {
-    if(ProgramStates.empty())
+    if(!ProgramStates.empty())
         ProgramStates.back()->Keyboard(key, xPos, yPos);
 }
 
@@ -172,13 +172,13 @@ void GlutProgram::SetScreenWidth(int w)
 
 void GlutProgram::Update()
 {
-    if(ProgramStates.empty())
+    if(!ProgramStates.empty())
         ProgramStates.back()->Update();
 }
 
 void GlutProgram::Render()
 {
-    if(ProgramStates.empty())
+    if(!ProgramStates.empty())
         ProgramStates.back()->Render();
 
     // Swap the buffers here for convenience
@@ -187,7 +187,7 @@ void GlutProgram::Render()
 
 void GlutProgram::Reshape(int newWidth, int newHeight)
 {
-    if(ProgramStates.empty())
+    if(!ProgramStates.empty())
         ProgramStates.back()->Reshape(newWidth, newHeight);
 }
 

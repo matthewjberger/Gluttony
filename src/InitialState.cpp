@@ -22,7 +22,6 @@ InitialState* InitialState::GetInstance()
 
 void InitialState::Initialize(GlutProgram* program)
 {
-    printf("InitialState Initialize\n");
     // Grab the main program instance for use in the program state
     mainProgram = program;
 }
