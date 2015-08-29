@@ -174,6 +174,9 @@ void GlutProgram::Update()
 {
     if(!ProgramStates.empty())
         ProgramStates.back()->Update();
+
+    // Call the render callback
+    glutPostRedisplay();
 }
 
 void GlutProgram::Render()
