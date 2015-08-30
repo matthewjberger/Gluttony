@@ -40,10 +40,13 @@ bool GlutProgram::Initialize( int argc, char **argv, int width, int height, int 
 {
     title = windowTitle;
 
+    screenWidth  = width;
+    screenHeight = height;
+
     // Initialize GLUT
     glutInit(&argc, argv);
     glutInitDisplayMode(flags);
-    glutInitWindowSize(width, height);
+    glutInitWindowSize(screenWidth, screenHeight);
 
     // Name and create the window
     glutCreateWindow(title.c_str());
