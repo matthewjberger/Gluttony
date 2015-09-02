@@ -202,6 +202,7 @@ void GlutProgram::Reshape(int newWidth, int newHeight)
 
 void GlutProgram::Run()
 {
+    previousTime = std::chrono::high_resolution_clock::now();
     glutMainLoop();
 }
 
@@ -211,5 +212,14 @@ float GlutProgram::GetAspectRatio()
     float adjustedScreenHeight = screenHeight;
     if(screenHeight == 0) adjustedScreenHeight = 1;
     return (float(screenWidth)/float(adjustedScreenHeight));
+}
+
+float GlutProgram::GetTimeDelta()
+{
+    currentTime        = std::chrono::high_resolution_clock::now();
+    float returnValue = std::chrono::duration_cast< std::chrono::duration<float> >(currentTime - previousTime).count();
+    previousTime         = std::chrono::high_resolution_clock::now();
+
+    return returnValue;
 }
 

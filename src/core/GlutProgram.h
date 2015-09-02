@@ -57,6 +57,11 @@ class GlutProgram
 
         // Program States
         std::vector<ProgramState *> ProgramStates;
+
+
+        // Internal Timer
+        std::chrono::time_point<std::chrono::high_resolution_clock> previousTime, currentTime;
+        float GetTimeDelta();
 };
 
 // Program state abstract class
