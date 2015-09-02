@@ -2,24 +2,26 @@
 using namespace std;
 
 // GLUT Callback handlers
-extern "C" void RenderCallback()
+extern "C"
 {
-    GlutProgram::GetInstance()->Render();
-}
+    void RenderCallback()
+    {
+        GlutProgram::GetInstance()->Render();
+    }
 
-extern "C" void ReshapeCallback(int width, int height)
-{
-    GlutProgram::GetInstance()->Reshape(width, height);
-}
+    void ReshapeCallback(int width, int height)
+    {
+        GlutProgram::GetInstance()->Reshape(width, height);
+    }
 
-extern "C" void UpdateCallback()
-{
-    GlutProgram::GetInstance()->Update();
-}
-
-extern "C" void KeyboardCallback(unsigned char key, int xPos, int yPos)
-{
-    GlutProgram::GetInstance()->Keyboard(key, xPos, yPos);
+    void UpdateCallback()
+    {
+        GlutProgram::GetInstance()->Update();
+    }
+    void KeyboardCallback(unsigned char key, int xPos, int yPos)
+    {
+        GlutProgram::GetInstance()->Keyboard(key, xPos, yPos);
+    }
 }
 
 GlutProgram *GlutProgram::instance = 0;

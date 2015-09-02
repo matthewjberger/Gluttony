@@ -6,24 +6,12 @@
 #include "ShaderProgram.h"
 #include "VAO.h"
 #include "VBO.h"
-
 #include <iostream>
 #include <vector>
 
 class ProgramState;
 class GlutProgram
 {
-    private:
-        static GlutProgram *instance;
-
-        GlutProgram();
-        ~GlutProgram();
-
-        int screenWidth;
-        int screenHeight;
-
-        std::string title;
-
     public:
 
         static GlutProgram *GetInstance();
@@ -33,7 +21,13 @@ class GlutProgram
 
         // Setup and Cleanup functions
         // Default flags set up a double buffered window with a depth buffer
-        bool Initialize( int argc = 0, char **argv = NULL, int width = 640, int height = 480, int flags = GLUT_DOUBLE | GLUT_DEPTH, std::string windowTitle = "OpenGL Program");
+        bool Initialize( int argc                = 0,
+                         char **argv             = NULL,
+                         int width               = 640,
+                         int height              = 480,
+                         int flags               = GLUT_DOUBLE | GLUT_DEPTH,
+                         std::string windowTitle = "OpenGL Program");
+
         bool LoadContent(ProgramState* initialState);
         void Quit(std::string message = "");
 
@@ -58,10 +52,21 @@ class GlutProgram
         // Program States
         std::vector<ProgramState *> ProgramStates;
 
-
         // Internal Timer
         std::chrono::time_point<std::chrono::high_resolution_clock> previousTime, currentTime;
         float GetTimeDelta();
+
+    private:
+        static GlutProgram *instance;
+
+        GlutProgram();
+        ~GlutProgram();
+
+        int screenWidth;
+        int screenHeight;
+
+        std::string title;
+
 };
 
 // Program state abstract class
