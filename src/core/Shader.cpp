@@ -148,3 +148,14 @@ void Shader::PrintLog()
         printf("Name %d is not a shader\n", shaderID);
     }
 }
+
+bool Shader::IsLoaded()
+{
+    return loaded;
+}
+
+GLuint Shader::GetID()
+{
+    return shaderID;
+}
+

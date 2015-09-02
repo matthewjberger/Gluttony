@@ -15,6 +15,7 @@ class VAO
         void Bind();
         void Unbind();
         void EnableAttribute(GLint location = 0);
+        void DisableAttribute(GLint location = 0);
         void ConfigureAttribute(GLuint index, GLint size, GLenum type,
                                 GLboolean normalized, GLsizei stride, const GLvoid* pointer);
 

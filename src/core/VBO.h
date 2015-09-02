@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __VBO_H
+#define __VBO_H
 
 #include "GlobalIncludes.h"
 
@@ -42,3 +43,5 @@ class VBO
         // Expandable data vector
         std::vector<GLbyte> data;
 };
+
+#endif

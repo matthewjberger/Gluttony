@@ -35,6 +35,11 @@ void VAO::EnableAttribute(GLint location)
     glEnableVertexAttribArray(location);
 }
 
+void VAO::DisableAttribute(GLint location)
+{
+    glDisableVertexAttribArray(location);
+}
+
 void VAO::ConfigureAttribute(GLuint index, GLint size, GLenum type,
                                 GLboolean normalized, GLsizei stride, const GLvoid* pointer)
 {

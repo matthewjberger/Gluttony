@@ -23,16 +23,10 @@ class Shader
         void PrintLog();
 
         // Loaded if shader was compiled succesfully
-        bool IsLoaded()
-        {
-            return loaded;
-        }
+        bool IsLoaded();
 
         // Returns ID
-        GLuint GetID()
-        {
-            return shaderID;
-        }
+        GLuint GetID();
 
     private:
 
