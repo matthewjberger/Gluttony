@@ -41,6 +41,8 @@ bool ShaderProgram::AddShaderFromFile(std::string path, GLuint shaderType)
 
     newShader->DeleteShader();
 
+    delete newShader;
+
     newShader = NULL;
 
     return true;
