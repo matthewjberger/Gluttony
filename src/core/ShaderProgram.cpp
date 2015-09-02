@@ -31,6 +31,21 @@ void ShaderProgram::CreateProgram()
     programID = glCreateProgram();
 }
 
+bool ShaderProgram::AddShaderFromFile(std::string path, GLuint shaderType)
+{
+    Shader *newShader = new Shader();
+
+    newShader->Load(path, shaderType);
+
+    AddShader(newShader);
+
+    newShader->DeleteShader();
+
+    newShader = NULL;
+
+    return true;
+}
+
 bool ShaderProgram::AddShader(Shader* shader)
 {
     if (!shader->IsLoaded())

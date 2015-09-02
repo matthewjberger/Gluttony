@@ -13,6 +13,7 @@ class ShaderProgram
         void DeleteProgram();
 
         bool AddShader(Shader* shader);
+        bool AddShaderFromFile(std::string path, GLuint shaderType);
         bool LinkProgram();
 
         void PrintLog();
