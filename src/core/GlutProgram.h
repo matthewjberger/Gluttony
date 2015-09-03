@@ -32,7 +32,7 @@ class GlutProgram
         void Quit(std::string message = "");
 
         // GLUT callbacks
-        void Mouse(int button, int state, int xpos, int yPos);
+        void Mouse(int button, int state, int xPos, int yPos);
         void Keyboard(unsigned char key, int xPos, int yPos);
         void Reshape(int newWidth, int newHeight);
         void Update();
@@ -91,7 +91,7 @@ class ProgramState
         }
 
         // GLUT callbacks
-        virtual void Mouse(int button, int state, int xPos, int yPos);
+        virtual void Mouse(int button, int state, int xPos, int yPos) = 0;
         virtual void Keyboard(unsigned char key, int xPos, int yPos) = 0;
         virtual void Reshape(int newWidth, int newHeight) = 0;
         virtual void Render() = 0;
