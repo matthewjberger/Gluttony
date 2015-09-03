@@ -22,6 +22,11 @@ void InitialState::Finalize()
     // Free Resources here
 }
 
+void InitialState::Mouse(int button, int state, int xPos, int yPos)
+{
+    // Handle Mouse input
+}
+
 void InitialState::Keyboard(unsigned char key, int xPos, int yPos)
 {
     // Handle keyboard input

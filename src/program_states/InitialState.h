@@ -9,9 +9,10 @@ class InitialState : public ProgramState
         void Pause();
         void Resume();
 
+        void Mouse(int button, int state, int xPos, int yPos);
+        void Keyboard(unsigned char key, int xPos, int yPos);
         void Reshape(int newWidth, int newHeight);
         void Render();
-        void Keyboard(unsigned char key, int xPos, int yPos);
         void Update();
 
         static InitialState* GetInstance();
@@ -27,5 +28,4 @@ class InitialState : public ProgramState
         /**************************/
         /* Place state items here */
         /**************************/
-
 };

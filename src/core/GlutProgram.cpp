@@ -18,6 +18,12 @@ extern "C"
     {
         GlutProgram::GetInstance()->Update();
     }
+
+    void MouseCallback(int button, int state, int xPos, int yPos)
+    {
+        GlutProgram::GetInstance()->Mouse(button, state, xPos, yPos);
+    }
+
     void KeyboardCallback(unsigned char key, int xPos, int yPos)
     {
         GlutProgram::GetInstance()->Keyboard(key, xPos, yPos);
@@ -131,6 +137,12 @@ void GlutProgram::DestroyInstance()
 {
     delete instance;
     instance = 0;
+}
+
+void GlutProgram::Mouse(int button, int state, int xPos, int yPos)
+{
+    if(!ProgramStates.empty())
+        ProgramStates.back()->Mouse(button, state, xPos, yPos);
 }
 
 void GlutProgram::Keyboard(unsigned char key, int xPos, int yPos)

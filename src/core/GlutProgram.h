@@ -32,10 +32,11 @@ class GlutProgram
         void Quit(std::string message = "");
 
         // GLUT callbacks
+        void Mouse(int button, int state, int xpos, int yPos);
         void Keyboard(unsigned char key, int xPos, int yPos);
+        void Reshape(int newWidth, int newHeight);
         void Update();
         void Render();
-        void Reshape(int newWidth, int newHeight);
 
         // State machine functions
         void ChangeState(ProgramState *state);
@@ -43,10 +44,10 @@ class GlutProgram
         void PopState();
 
         // Member accessors
-        void SetScreenWidth(int w);
-        int  GetScreenWidth();
-        void SetScreenHeight(int h);
-        int  GetScreenHeight();
+        void  SetScreenWidth(int w);
+        int   GetScreenWidth();
+        void  SetScreenHeight(int h);
+        int   GetScreenHeight();
         float GetAspectRatio();
 
         // Program States
@@ -90,8 +91,9 @@ class ProgramState
         }
 
         // GLUT callbacks
-        virtual void Reshape(int newWidth, int newHeight) = 0;
+        virtual void Mouse(int button, int state, int xPos, int yPos);
         virtual void Keyboard(unsigned char key, int xPos, int yPos) = 0;
+        virtual void Reshape(int newWidth, int newHeight) = 0;
         virtual void Render() = 0;
         virtual void Update() = 0;
 
