@@ -74,6 +74,7 @@ bool GlutProgram::Initialize( int argc, char **argv, int width, int height, int 
     glutReshapeFunc(ReshapeCallback);   // Called if the window is resized
     glutIdleFunc(UpdateCallback);       // Called if there is nothing else to do
     glutKeyboardFunc(KeyboardCallback); // Called if there is keyboard input
+    glutMouseFunc(MouseCallback);       // Called if there is mouse input
 
     return true;
 }
