@@ -7,8 +7,11 @@ LIBS= -lglut -lGLEW -lGL
 #LIBS=  -framework OpenGL -framework GLUT -framework Cocoa -lGLEW -stdlib=libc++
 # Assuming you want to use a recent compiler
 
-# Executable file name and directory
-EXE= ../bin/Gluttony
+# Output directory
+OUT_DIR= ../bin/
+
+# Executable file
+EXE = Gluttony
 
 # Compiler flags
 CXXFLAGS= -g -Wall -std=c++0x
@@ -25,7 +28,9 @@ OBJ = $(SRC:%.cpp=%.o)
 all: $(EXE)
 
 $(EXE): $(OBJ)
-	$(CC) $(OBJ) -o $(EXE) $(LIBS) && make clean
+	mkdir -p $(OUT_DIR) \
+	&& $(CC) $(OBJ) -o $(OUT_DIR)$(EXE) $(LIBS) \
+	&& make clean
 
 %.o: %.cpp
 	g++ -c $(CXXFLAGS) $< -o $@
