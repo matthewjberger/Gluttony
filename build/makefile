@@ -36,6 +36,6 @@ $(EXE): $(OBJ)
 	g++ -c $(CXXFLAGS) $< -o $@
 
 clean:
-	rm $(SRC_DIR)/*.o
-	rm $(SRC_DIR)/core/*.o
-	rm $(SRC_DIR)/program_states/*.o
+	-rm $(SRC_DIR)/*.o
+	-rm $(SRC_DIR)/core/*.o
+	-rm $(SRC_DIR)/program_states/*.o
