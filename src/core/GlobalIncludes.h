@@ -7,4 +7,8 @@
 #include <glm/gtc/type_ptr.hpp> // Makes passing matrices to shaders easier
 
 #include <stdio.h>
+#include <string>
+#include <fstream>
+#include <vector>
+
 #include <chrono>

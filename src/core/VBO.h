@@ -3,8 +3,6 @@
 
 #include "GlobalIncludes.h"
 
-#include <vector>
-
 // Vertex Buffer Object class
 class VBO
 {
