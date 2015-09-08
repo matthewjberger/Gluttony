@@ -25,6 +25,9 @@ SRC= $(shell find $(SRC_DIR) -name *.cpp)
 # Convert all source files to object files
 OBJ = $(SRC:%.cpp=%.o)
 
+# Extra include paths
+INCLUDE_PATHS=-I/usr/include/freetype2
+
 all: $(EXE)
 
 $(EXE): $(OBJ)
@@ -33,7 +36,7 @@ $(EXE): $(OBJ)
 	&& make clean
 
 %.o: %.cpp
-	g++ -c $(CXXFLAGS) $< -o $@
+	g++ -c $(CXXFLAGS) $(INCLUDE_PATHS)  $< -o $@
 
 clean:
 	-rm $(SRC_DIR)/*.o
