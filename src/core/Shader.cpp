@@ -17,7 +17,7 @@ Shader::~Shader()
 
 void Shader::DeleteShader()
 {
-    if (!IsLoaded())
+    if (IsLoaded())
     {
         // Delete the shader
         glDeleteShader(shaderID);
