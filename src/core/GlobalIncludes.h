@@ -12,3 +12,7 @@
 #include <vector>
 
 #include <chrono>
+#include <SOIL/SOIL.h>
+
+#include <ft2build.h>
+#define FT_FREETYPE_H
