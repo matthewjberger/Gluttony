@@ -8,12 +8,12 @@ int main(int argc, char **argv)
 
     if(mainProgram->Initialize(argc, argv) == false)
     {
-        printf("ERROR: Failed to initialize program!");
+        mainProgram->Quit("ERROR: Failed to initialize program!");
     }
 
     if(mainProgram->LoadContent(InitialState::GetInstance()) == false)
     {
-        printf("ERROR: Failed to load content!");
+        mainProgram->Quit("ERROR: Failed to load content!");
     }
 
     mainProgram->Run();
