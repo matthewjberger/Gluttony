@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <GL/glew.h> // Glew must be included before the main GL libs
 #include <GL/glut.h> // Doing otherwise causes compiler errors
 
@@ -15,4 +16,3 @@
 #include <SOIL/SOIL.h>
 
 #include <ft2build.h>
-#define FT_FREETYPE_H

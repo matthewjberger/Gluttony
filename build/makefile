@@ -1,6 +1,6 @@
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL -lSOIL -lfreetype2
+LIBS= -lglut -lGLEW -lGL -lSOIL
 
 # For Macs uncomment the next line and comment out the previous one
 #CC=clang++
