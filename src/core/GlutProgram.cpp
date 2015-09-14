@@ -95,8 +95,7 @@ void GlutProgram::Quit(string message)
         ProgramStates.pop_back();
     }
 
-    // TODO: Find a cleaner way to exit GLUT
-    exit(0);
+    glutLeaveMainLoop();
 }
 
 GlutProgram *GlutProgram::GetInstance()
