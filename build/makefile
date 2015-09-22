@@ -1,6 +1,6 @@
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL -lSOIL
+LIBS= -lglut -lGLEW -lGL
 
 # For Macs uncomment the next line and comment out the previous one
 #CC=clang++
@@ -26,7 +26,7 @@ SRC= $(shell find $(SRC_DIR) -name *.cpp)
 OBJ = $(SRC:%.cpp=%.o)
 
 # Extra include paths
-INCLUDE_PATHS=-I/usr/include/freetype2
+INCLUDE_PATHS=#-I/usr/include/freetype2
 
 all: $(EXE)
 
