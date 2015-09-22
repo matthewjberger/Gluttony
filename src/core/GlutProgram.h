@@ -8,6 +8,7 @@
 #include "VBO.h"
 #include "Model.h"
 #include "Menu.h"
+#include "Texture.h"
 #include <iostream>
 #include <vector>
 
