@@ -5,7 +5,11 @@
 
 using namespace std;
 
-Model::Model(){}
+Model::Model()
+{
+    textureLoaded = false;
+}
+
 Model::~Model(){}
 
 void Model::LoadModel(std::string path)
@@ -18,6 +22,8 @@ void Model::LoadModel(std::string path)
     vector<glm::vec3> tempV;
     vector<glm::vec2> tempUV;
     //vector<glm::vec3> tempN;
+
+    string textureName = "";
 
     // Iterate over the file line by line
     while(getline(file, line, '\n'))
@@ -81,6 +87,10 @@ void Model::LoadModel(std::string path)
             //nIndices.push_back(nIndex[2]);
 
         }
+        else if(firstToken == "usemtl")
+        {
+            ss >> textureName;
+        }
     }
 
     cout << "Loaded Vertices: " << endl;
@@ -125,6 +135,19 @@ void Model::LoadModel(std::string path)
         //vertices.push_back(normal);
     //}
 
+    cout << "Attempting to load texture: " << textureName << endl;
+    if(!ifstream(textureName.c_str()))
+    {
+        cout << "Texture could not be found!" << endl;
+        cout << "Make sure the texture is in the same folder as the executable." << endl;
+    }
+    else
+    {
+       texture.Load(textureName.c_str());
+       textureLoaded = true;
+       cout << "Model texture loaded successfully." << endl;
+    }
+
     cout << "Finished loading model successfully!" << endl;
 }
 
@@ -145,3 +168,13 @@ std::vector<glm::vec3> Model::GetVertices()
     return vertices;
 }
 
+void Model::Draw()
+{
+    if(textureLoaded) texture.Bind(0);
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
+}
+
+Texture* Model::GetTexture()
+{
+    return &texture; // null
+}
