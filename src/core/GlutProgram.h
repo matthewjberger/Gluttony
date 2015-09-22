@@ -6,6 +6,8 @@
 #include "ShaderProgram.h"
 #include "VAO.h"
 #include "VBO.h"
+#include "Model.h"
+#include "Menu.h"
 #include <iostream>
 #include <vector>
 
