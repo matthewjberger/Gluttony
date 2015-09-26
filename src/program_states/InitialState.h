@@ -1,4 +1,5 @@
 #include "../core/GlutProgram.h"
+#include "../core/Model.h"
 
 class InitialState : public ProgramState
 {
@@ -28,4 +29,13 @@ class InitialState : public ProgramState
         /**************************/
         /* Place state items here */
         /**************************/
+        Model *model;
+        ShaderProgram shaderProgram;
+
+        glm::mat4 modelMatrix;
+        glm::mat4 viewMatrix;
+        glm::mat4 projectionMatrix;
+        glm::mat4 mvpMatrix;
+
+
 };

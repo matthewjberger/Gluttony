@@ -1,180 +1,146 @@
 #include "Model.h"
-#include <sstream>
-#include <cstdlib>
-#include <iostream>
-
 using namespace std;
 
-Model::Model()
+Model::Model(string path)
 {
-    textureLoaded = false;
+    LoadModel(path.c_str());
 }
 
-Model::~Model(){}
+Model::~Model()
+{
+}
+
+void Model::Draw(ShaderProgram shaderProgram)
+{
+    for(GLuint i = 0; i < meshes.size(); i++)
+    {
+        meshes[i].Draw(shaderProgram);
+    }
+}
 
 void Model::LoadModel(std::string path)
 {
-    ifstream file(path.c_str());
-    string line = "";
-    file.clear();
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
-    vector<unsigned int> vIndices, uvIndices, nIndices;
-    vector<glm::vec3> tempV;
-    vector<glm::vec2> tempUV;
-    //vector<glm::vec3> tempN;
-
-    string textureName = "";
-
-    // Iterate over the file line by line
-    while(getline(file, line, '\n'))
+    if(!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
-        // Get the first token from the line
-        string firstToken;
-        istringstream ss(line);
-        if(!(ss >> firstToken)) { break; }
-
-        // Vertex
-        if(firstToken == "v")
-        {
-            glm::vec3 vertex;
-            ss >> vertex.x >> vertex.y >> vertex.z;
-            tempV.push_back(vertex);
-        }
-        // Texture coordinate
-        else if(firstToken == "vt")
-        {
-            glm::vec2 uv;
-            ss >> uv.x >> uv.y;
-            tempUV.push_back(uv);
-        }
-        // Normal
-        /*
-        else if(firstToken == "vn")
-        {
-            glm::vec3 normal;
-            ss >> normal.x >> normal.y >> normal.z;
-            tempN.push_back(normal);
-        }
-        */
-        // Face
-        else if(firstToken == "f")
-        {
-            string first, second, third = "";
-            unsigned int vIndex[3], uvIndex[3]; //, nIndex[3];
-
-            ss >> first >> second >> third;
-            cout << first << " " << second << " " << third << endl;
-
-            vIndex[0]  = atoi(&first[0]);
-            vIndex[1]  = atoi(&second[0]);
-            vIndex[2]  = atoi(&third[0]);
-            vIndices.push_back(vIndex[0]);
-            vIndices.push_back(vIndex[1]);
-            vIndices.push_back(vIndex[2]);
-
-            uvIndex[0] = atoi(&first[2]);
-            uvIndex[1] = atoi(&second[2]);
-            uvIndex[2] = atoi(&third[2]);
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
-            uvIndices.push_back(uvIndex[2]);
-
-            //nIndex[0]  = atoi(&first[4]);
-            //nIndex[1]  = atoi(&second[4]);
-            //nIndex[2]  = atoi(&third[4]);
-            //nIndices.push_back(nIndex[0]);
-            //nIndices.push_back(nIndex[1]);
-            //nIndices.push_back(nIndex[2]);
-
-        }
-        else if(firstToken == "usemtl")
-        {
-            ss >> textureName;
-        }
+        cout << "ERROR: Assimp - " << importer.GetErrorString() << endl;
+        return;
     }
 
-    cout << "Loaded Vertices: " << endl;
-    for(unsigned int i = 0; i < tempV.size(); i++)
+    directory = path.substr(0, path.find_last_of('/'));
+    ProcessNode(scene->mRootNode, scene);
+}
+
+void Model::ProcessNode(aiNode* node, const aiScene* scene)
+{
+    // Process all meshes in the node
+    for(GLuint i = 0; i < node->mNumMeshes; i++)
     {
-        cout << tempV[i].x << " " << tempV[i].y << " " << tempV[i].z << endl;
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        meshes.push_back(ProcessMesh(mesh,scene));
     }
-    cout << endl;
 
-    cout << "Loaded Tex-Coords: " << endl;
-    for(unsigned int i = 0; i < tempUV.size(); i++)
+    // Process all child nodes
+    for(GLuint i = 0; i < node->mNumChildren; i++)
     {
-        cout << tempUV[i].x << " " << tempUV[i].y << endl;
+        ProcessNode(node->mChildren[i], scene);
     }
-    cout << endl;
+}
 
-    //cout << "Loaded Normals: " << endl;
-    //for(unsigned int i = 0; i < tempN.size(); i++)
-    //{
-        //cout << tempN[i].x << " " << tempN[i].y << " " << tempN[i].z << endl;
-    //}
-    //cout << endl;
+Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+{
+    vector<Vertex> vertices;
+    vector<GLuint> indices;
+    vector<Texture> textures;
 
-    for(unsigned int i = 0; i < vIndices.size(); i++)
+    for(GLuint i = 0; i < mesh->mNumVertices; i++)
     {
-        unsigned int vertexIndex = vIndices[i];
-        glm::vec3 vertex = tempV[vertexIndex - 1];
+        Vertex vertex;
+        glm::vec3 vector;
+
+        // Positions
+        vector.x = mesh->mVertices[i].x;
+        vector.y = mesh->mVertices[i].y;
+        vector.z = mesh->mVertices[i].z;
+        vertex.Position = vector;
+
+        // Normals
+        vector.x = mesh->mNormals[i].x;
+        vector.y = mesh->mNormals[i].y;
+        vector.z = mesh->mNormals[i].z;
+        vertex.Normal = vector;
+
+        // Texture Coordinates
+        if(mesh->mTextureCoords[0])
+        {
+            glm::vec2 vec;
+            vec.x = mesh->mTextureCoords[0][i].x;
+            vec.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords = vec;
+        }
+        else
+        {
+            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+        }
+
         vertices.push_back(vertex);
     }
-
-    for(unsigned int i = 0; i < uvIndices.size(); i++)
+    // Process indices
+    for(GLuint i = 0; i < mesh->mNumFaces; i++)
     {
-        unsigned int uvIndex = uvIndices[i];
-        glm::vec2 uvCoords = tempUV[uvIndex - 1];
-        texCoords.push_back(uvCoords);
+        aiFace face = mesh->mFaces[i];
+
+        // Get all the indices from the face and store them
+        for(GLuint j = 0; j < face.mNumIndices; j++)
+        {
+            indices.push_back(face.mIndices[j]);
+        }
+    }
+    // Process Material
+    if(mesh->mMaterialIndex >= 0)
+    {
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+        // Diffuse
+        vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+        // Specular
+        vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
 
-    //for(unsigned int i = 0; i < nIndices.size(); i++)
-    //{
-        //unsigned int normalIndex = nIndices[i];
-        //glm::vec3 normal = tempN[normalIndex - 1];
-        //vertices.push_back(normal);
-    //}
+    return Mesh(vertices, indices, textures);
+}
 
-    cout << "Attempting to load texture: " << textureName << endl;
-    if(!ifstream(textureName.c_str()))
+std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+{
+    vector<Texture> textures;
+    for(GLuint i = 0; i < mat->GetTextureCount(type); i++)
     {
-        cout << "Texture could not be found!" << endl;
-        cout << "Make sure the texture is in the same folder as the executable." << endl;
+        aiString str;
+        mat->GetTexture(type, i, &str);
+
+        // Check if already loaded
+        GLboolean skip = false;
+        for(GLuint j = 0; j < textures_loaded.size(); j++)
+        {
+            if(textures_loaded[j].GetPath() == str)
+            {
+                textures.push_back(textures_loaded[j]);
+            }
+            if(!skip)
+            {
+                Texture texture;
+                texture.Load(str.C_Str(), directory, true);
+                texture.SetType(typeName);
+                texture.SetPath(str);
+                textures.push_back(texture);
+            }
+        }
     }
-    else
-    {
-       texture.Load(textureName.c_str());
-       textureLoaded = true;
-       cout << "Model texture loaded successfully." << endl;
-    }
-
-    cout << "Finished loading model successfully!" << endl;
+    return textures;
 }
 
-std::vector<glm::vec2> Model::GetTexCoords()
-{
-    return texCoords;
-}
-
-/*
-std::vector<glm::vec3> Model::GetNormals()
-{
-    return normals;
-}
-*/
-
-std::vector<glm::vec3> Model::GetVertices()
-{
-    return vertices;
-}
-
-void Model::Draw()
-{
-    if(textureLoaded) texture.Bind(0);
-    glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
-}
-
-Texture* Model::GetTexture()
-{
-    return &texture; // null
-}

@@ -27,8 +27,7 @@ class VBO
         void AddData( void* newData, GLuint dataSize);
 
         // Uploads data
-        void UploadData(GLenum drawingHint);
-
+        void UploadData(GLenum drawingHint = GL_STATIC_DRAW);
 
     private:
 

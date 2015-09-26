@@ -33,8 +33,43 @@ void Texture::Free()
     glDeleteTextures(1, &mTextureID);
 }
 
-void Texture::Load(string path, bool genMipMaps)
+void Texture::SetFiltering(int magnification, int minification)
 {
+    // Set magnification filter
+    glSamplerParameteri(mSampler, GL_TEXTURE_MAG_FILTER, magnification);
+
+    // Set minification filter
+    glSamplerParameteri(mSampler, GL_TEXTURE_MIN_FILTER, minification);
+
+    // Set magnification member variable
+    mMagnification = magnification;
+
+    // Set miniification member variable
+    mMinification = minification;
+}
+
+void Texture::Bind(int textureUnit)
+{
+    // Bind as current texture for rendering
+    glActiveTexture(GL_TEXTURE0 + textureUnit);
+    glBindTexture(GL_TEXTURE_2D, mTextureID);
+    glBindSampler(textureUnit, mSampler);
+}
+
+std::string Texture::GetType()
+{
+    return type;
+}
+
+void Texture::SetType(std::string _type)
+{
+    type = _type;
+}
+
+void Texture::Load(string path, string directory, bool genMipMaps)
+{
+
+    string fullPath = directory + '/' + fullPath;
     // The texture id
     mTextureID = 0;
 
@@ -75,29 +110,35 @@ void Texture::Load(string path, bool genMipMaps)
     // Set path
     mPath = path;
 
+    // Parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     // Get rid of the temporary surface
     SOIL_free_image_data(textureImage);
 }
 
-void Texture::SetFiltering(int magnification, int minification)
+aiString Texture::GetPath()
 {
-    // Set magnification filter
-    glSamplerParameteri(mSampler, GL_TEXTURE_MAG_FILTER, magnification);
-
-    // Set minification filter
-    glSamplerParameteri(mSampler, GL_TEXTURE_MIN_FILTER, minification);
-
-    // Set magnification member variable
-    mMagnification = magnification;
-
-    // Set miniification member variable
-    mMinification = minification;
+    return mPath;
 }
 
-void Texture::Bind(int textureUnit)
+void Texture::SetSamplerParameter(GLenum parameter, GLenum value)
 {
-    // Bind as current texture for rendering
-    glActiveTexture(GL_TEXTURE0 + textureUnit);
-    glBindTexture(GL_TEXTURE_2D, mTextureID);
-    glBindSampler(textureUnit, mSampler);
+    glSamplerParameteri(mSampler, parameter, value);
 }
+
+void Texture::SetWrap()
+{
+    glBindSampler(0, mSampler);
+    glSamplerParameteri(mSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glSamplerParameteri(mSampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
+void Texture::SetPath(aiString path)
+{
+    mPath = path;
+}
+

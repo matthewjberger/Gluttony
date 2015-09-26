@@ -53,7 +53,7 @@ bool ShaderProgram::AddShader(Shader* shader)
     if (!shader->IsLoaded())
     {
         // Print error message
-        printf("Error: Tried to attach shader that wasn't loaded");
+        printf("Error: Tried to attach shader that wasn't loaded!\n");
 
         // Return status
         return false;

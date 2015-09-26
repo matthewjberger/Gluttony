@@ -1,6 +1,6 @@
 # Linux
 CC=g++
-LIBS= -lglut -lGLEW -lGL -lSOIL
+LIBS= -lglut -lGLEW -lGL -lSOIL -lassimp
 
 # For Macs uncomment the next line and comment out the previous one
 #CC=clang++

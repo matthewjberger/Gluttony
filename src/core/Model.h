@@ -3,29 +3,28 @@
 
 #include "../core/GlobalIncludes.h"
 #include "Texture.h"
+#include "ShaderProgram.h"
+#include "Mesh.h"
 
 class Model
 {
     public:
-        Model();
+        Model(std::string path);
         ~Model();
 
-        void Draw();
-        void LoadModel(std::string path);
-
-        Texture* GetTexture();
-
-        std::vector<glm::vec3> GetVertices();
-        std::vector<glm::vec2> GetTexCoords();
-        //std::vector<glm::vec3> GetNormals();
+        void Draw(ShaderProgram shaderProgram);
 
     private:
-        std::vector<glm::vec3> vertices;
-        std::vector<glm::vec2> texCoords;
-        //std::vector<glm::vec3> normals;
 
-        Texture texture;
-        bool textureLoaded;
+        // Model Data
+        std::vector<Mesh> meshes;
+        std::string directory;
+        std::vector<Texture> textures_loaded;
+
+        void LoadModel(std::string path);
+        void ProcessNode(aiNode* node, const aiScene* scene);
+        Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
+        std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 };
 
 #endif
