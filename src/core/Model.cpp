@@ -114,7 +114,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
     cout << "---- New Mesh Loaded ----" << endl;
     cout << "Total Vertices in mesh: " << vertices.size() << endl;
-    for(int i = 0; i < vertices.size(); i++)
+    for(unsigned int i = 0; i < vertices.size(); i++)
     {
         cout << "Position:" << endl;
         cout << vertices[i].Position.x  << " " << vertices[i].Position.y  << " "  << vertices[i].Position.z << endl;
@@ -127,13 +127,13 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     }
 
     cout << "Total Indices for mesh: " << indices.size() << endl;
-    for(int i = 0; i < indices.size(); i++)
+    for(unsigned int i = 0; i < indices.size(); i++)
     {
         cout << indices[i] << endl;
     }
 
     cout << "Total Textures loaded for mesh: " << textures.size() << endl;
-    for(int i = 0; i < textures.size(); i++)
+    for(unsigned int i = 0; i < textures.size(); i++)
     {
         cout << textures[i].GetPath().C_Str() << endl;
     }
