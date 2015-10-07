@@ -8,8 +8,6 @@ Mesh::Mesh(vector<Vertex> _vertices, vector<GLuint> _indices, vector<Texture> _t
     vertices = _vertices;
     indices  = _indices;
     textures = _textures;
-
-    SetupMesh();
 }
 
 void Mesh::Draw(ShaderProgram shaderProgram)
@@ -34,7 +32,6 @@ void Mesh::Draw(ShaderProgram shaderProgram)
     //}
     //glActiveTexture(GL_TEXTURE0);
 
-    shaderProgram.UseProgram();
     // Render the mesh
     meshVAO.Bind();
     //glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, &indices.front());
@@ -51,7 +48,7 @@ void Mesh::SetupMesh()
     meshVAO.Bind();
 
         meshVBO.Bind();
-        meshVBO.AddData(&vertices.front(), sizeof(glm::vec3) * vertices.size());
+        meshVBO.AddData(&vertices.front(), sizeof(Vertex) * vertices.size());
         meshVBO.UploadData();
 
         //meshIBO.Bind(GL_ELEMENT_ARRAY_BUFFER);
@@ -60,11 +57,11 @@ void Mesh::SetupMesh()
 
         // Vertex Positions
         meshVAO.EnableAttribute(0);
-        meshVAO.ConfigureAttribute(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (GLvoid*)0);
+        meshVAO.ConfigureAttribute(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
 
         // Colors
         meshVAO.EnableAttribute(1);
-        meshVAO.ConfigureAttribute(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (GLvoid*)0);
+        meshVAO.ConfigureAttribute(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex,TexCoords));
 
         // Vertex Normals
         //meshVAO.EnableAttribute(1);

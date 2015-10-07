@@ -38,8 +38,5 @@ class InitialState : public ProgramState
         glm::mat4 projectionMatrix;
         glm::mat4 mvpMatrix;
 
-        VAO meshVAO;
-        VBO meshVBO;
-
         Texture meshTexture;
 };

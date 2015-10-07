@@ -26,12 +26,12 @@ class Mesh
         Mesh(std::vector<Vertex> _vertices, std::vector<GLuint> _indices, std::vector<Texture> _textures);
         void Draw(ShaderProgram shaderProgram);
 
+        void SetupMesh();
+
     private:
         VAO meshVAO;
         VBO meshVBO;
         VBO meshIBO;
-
-        void SetupMesh();
 };
 
 #endif

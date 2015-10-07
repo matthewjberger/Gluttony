@@ -40,6 +40,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(ProcessMesh(mesh,scene));
+        meshes.back().SetupMesh();
     }
 
     // Process all child nodes
@@ -161,11 +162,11 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         //cout << indices[i] << endl;
     //}
 
-    cout << "Total Textures loaded for mesh: " << textures.size() << endl;
-    for(unsigned int i = 0; i < textures.size(); i++)
-    {
-        cout << textures[i].GetPath().C_Str() << endl;
-    }
+    //cout << "Total Textures loaded for mesh: " << textures.size() << endl;
+    //for(unsigned int i = 0; i < textures.size(); i++)
+    //{
+        //cout << textures[i].GetPath().C_Str() << endl;
+    //}
 
     return Mesh(vertices, indices, textures);
 }

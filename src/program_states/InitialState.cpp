@@ -36,37 +36,12 @@ void InitialState::Initialize(GlutProgram* program)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    cout << "Positions:" << endl;
-    for(unsigned int i = 0; i < model->meshes.back().vertices.size(); i++)
-    {
-        cout << model->meshes.back().vertices[i].Position.x << " " <<  model->meshes.back().vertices[i].Position.y << " " << model->meshes.back().vertices[i].Position.z << endl;
-    }
-
-    meshVAO.Create();
-    meshVBO.Create();
-
-    meshVAO.Bind();
-    meshVBO.Bind();
-
-    meshVBO.AddData(&model->meshes.back().vertices.front(), sizeof(Vertex) * model->meshes.back().vertices.size());
-    meshVBO.UploadData();
-
-    meshVAO.EnableAttribute(0);
-    meshVAO.EnableAttribute(1);
-
-    meshVAO.ConfigureAttribute(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    meshVAO.ConfigureAttribute(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex,TexCoords));
-
     meshTexture.Load("houseTexture.jpg", "Textures", true);
 
 }
 
 void InitialState::Finalize()
 {
-    meshVAO.Free();
-    meshVBO.Free();
-    meshTexture.Free();
-
     // Free Resources here
     shaderProgram.DeleteProgram();
 }
@@ -110,9 +85,7 @@ void InitialState::Render()
 
     meshTexture.Bind(0);
 
-    meshVAO.Bind();
-    glDrawArrays(GL_TRIANGLES, 0, model->meshes.back().vertices.size());
-    meshVAO.Unbind();
+    model->Draw(shaderProgram);
 }
 
 void InitialState::Reshape(int newWidth, int newHeight)
