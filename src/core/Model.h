@@ -12,20 +12,21 @@ class Model
         Model(std::string path);
         ~Model();
 
-        void Draw(ShaderProgram shaderProgram);
-
-        std::vector<Mesh> meshes;
-        std::vector<Texture> textures_loaded;
+        void Draw();
+        void LoadTexture(std::string image, bool genMipMaps);
+        void Free();
 
     private:
 
-        // Model Data
         std::string directory;
+        std::vector<Mesh> meshes;
 
         void LoadModel(std::string path);
         void ProcessNode(aiNode* node, const aiScene* scene);
-        Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-        std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+        Mesh ProcessMesh(aiMesh* mesh);
+
+        Texture texture;
+        bool textureLoaded;
 };
 
 #endif

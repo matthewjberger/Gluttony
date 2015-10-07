@@ -18,7 +18,7 @@ void InitialState::Initialize(GlutProgram* program)
     // Grab the main program instance for use in the program state
     mainProgram = program;
 
-    model = new Model("untitled.obj");
+    model = new Model("Assets/house.obj");
 
     shaderProgram.CreateProgram();
     shaderProgram.AddShaderFromFile("Shaders/vShader.glsl", GL_VERTEX_SHADER);
@@ -36,13 +36,14 @@ void InitialState::Initialize(GlutProgram* program)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    meshTexture.Load("houseTexture.jpg", "Textures", true);
+    model->LoadTexture("Assets/houseTexture.jpg", true);
 
 }
 
 void InitialState::Finalize()
 {
     // Free Resources here
+    model->Free();
     shaderProgram.DeleteProgram();
 }
 
@@ -83,9 +84,7 @@ void InitialState::Render()
     shaderProgram.SetUniform("mvpMatrix", &mvpMatrix);
     shaderProgram.SetUniform("sampler2D", 0);
 
-    meshTexture.Bind(0);
-
-    model->Draw(shaderProgram);
+    model->Draw();
 }
 
 void InitialState::Reshape(int newWidth, int newHeight)
@@ -98,7 +97,5 @@ void InitialState::Reshape(int newWidth, int newHeight)
 
     glViewport(0, 0, mainProgram->GetScreenWidth(), mainProgram->GetScreenHeight());
 
-    // NOTE: Update the projection matrix here if present
-    // Something similar to the code below
     projectionMatrix = glm::perspective(45.0f, mainProgram->GetAspectRatio(), 0.01f, 100.0f);
 }

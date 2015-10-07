@@ -10,8 +10,8 @@
 struct Vertex
 {
     glm::vec3 Position;
-    //glm::vec3 Normal;
     glm::vec2 TexCoords;
+    glm::vec3 Normal;
 };
 
 class Mesh
@@ -19,19 +19,17 @@ class Mesh
     public:
         // Mesh Data
         std::vector<Vertex> vertices;
-        std::vector<GLuint> indices;
-        std::vector<Texture> textures;
 
         // Functions
-        Mesh(std::vector<Vertex> _vertices, std::vector<GLuint> _indices, std::vector<Texture> _textures);
-        void Draw(ShaderProgram shaderProgram);
+        Mesh(std::vector<Vertex> _vertices);
+        void Draw();
 
         void SetupMesh();
+        void Free();
 
     private:
         VAO meshVAO;
         VBO meshVBO;
-        VBO meshIBO;
 };
 
 #endif

@@ -66,13 +66,10 @@ void Texture::SetType(std::string _type)
     type = _type;
 }
 
-void Texture::Load(string path, string directory, bool genMipMaps)
+void Texture::Load(string path, bool genMipMaps)
 {
 
-    // Store directory
-    string fullPath = directory + '/' + path;
-
-    // The texture id
+   // The texture id
     mTextureID = 0;
 
     // Load the image
