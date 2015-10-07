@@ -1,6 +1,7 @@
+// Example Model vertex shader
+
 attribute vec3 v_position;
 attribute vec2 v_color;
-attribute vec3 v_normal;
 
 varying vec2 color;
 uniform mat4 mvpMatrix;

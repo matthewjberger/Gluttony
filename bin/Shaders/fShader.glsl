@@ -1,3 +1,5 @@
+// Example Model fragment shader
+
 varying vec2 color;
 
 uniform sampler2D gSampler;
