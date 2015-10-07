@@ -34,8 +34,8 @@ class Texture
 
         std::string type;
         int mWidth, mHeight, mBPP;
-        unsigned int mTextureID;
-        unsigned int mSampler;
+        GLuint mTextureID;
+        GLuint mSampler;
 
         bool mMipMapsGenerated;
 

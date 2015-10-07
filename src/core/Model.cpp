@@ -55,82 +55,111 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     vector<GLuint> indices;
     vector<Texture> textures;
 
-    for(GLuint i = 0; i < mesh->mNumVertices; i++)
+    for(unsigned int i = 0; i < mesh->mNumFaces; i++)
     {
-        Vertex vertex;
-        glm::vec3 vector;
+        const aiFace& face = mesh->mFaces[i];
+        indices.push_back(face.mIndices[0]);
+        indices.push_back(face.mIndices[1]);
+        indices.push_back(face.mIndices[2]);
+    }
 
-        // Positions
-        vector.x = mesh->mVertices[i].x;
-        vector.y = mesh->mVertices[i].y;
-        vector.z = mesh->mVertices[i].z;
-        vertex.Position = vector;
-
-        // Normals
-        vector.x = mesh->mNormals[i].x;
-        vector.y = mesh->mNormals[i].y;
-        vector.z = mesh->mNormals[i].z;
-        vertex.Normal = vector;
+    for(unsigned int i = 0; i < indices.size(); i++)
+    {
+        const aiVector3D* temp = &(mesh->mVertices[indices[i]]);
+        Vertex v;
+        v.Position.x = temp->x;
+        v.Position.y = temp->y;
+        v.Position.z = temp->z;
 
         // Texture Coordinates
-        if(mesh->mTextureCoords[0])
+        if(mesh->HasTextureCoords(0))
         {
-            glm::vec2 vec;
-            vec.x = mesh->mTextureCoords[0][i].x;
-            vec.y = mesh->mTextureCoords[0][i].y;
-            vertex.TexCoords = vec;
+            v.TexCoords = glm::vec2(mesh->mTextureCoords[0][indices[i]].x, mesh->mTextureCoords[0][indices[i]].y);
         }
         else
         {
-            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+            v.TexCoords = glm::vec2(0.0f, 0.0f);
         }
 
-        vertices.push_back(vertex);
-    }
-    // Process indices
-    for(GLuint i = 0; i < mesh->mNumFaces; i++)
-    {
-        aiFace face = mesh->mFaces[i];
-
-        // Get all the indices from the face and store them
-        for(GLuint j = 0; j < face.mNumIndices; j++)
-        {
-            indices.push_back(face.mIndices[j]);
-        }
-    }
-    // Process Material
-    if(mesh->mMaterialIndex >= 0)
-    {
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-        // Diffuse
-        vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-        // Specular
-        vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+        vertices.push_back(v);
     }
 
-    cout << "---- New Mesh Loaded ----" << endl;
-    cout << "Total Vertices in mesh: " << vertices.size() << endl;
-    for(unsigned int i = 0; i < vertices.size(); i++)
-    {
-        cout << "Position:" << endl;
-        cout << vertices[i].Position.x  << " " << vertices[i].Position.y  << " "  << vertices[i].Position.z << endl;
+    //for(GLuint i = 0; i < mesh->mNumVertices; i++)
+    //{
+        //Vertex vertex;
+        //glm::vec3 vector;
 
-        cout << "Normal:" << endl;
-        cout << vertices[i].Normal.x    << " " << vertices[i].Normal.y    << " "  << vertices[i].Normal.z << endl;
+        //// Positions
+        //vector.x = mesh->mVertices[i].x;
+        //vector.y = mesh->mVertices[i].y;
+        //vector.z = mesh->mVertices[i].z;
+        //vertex.Position = vector;
 
-        cout << "TexCoords:" << endl;
-        cout << vertices[i].TexCoords.x << " " << vertices[i].TexCoords.y << endl << endl;
-    }
+        //// Normals
+        //vector.x = mesh->mNormals[i].x;
+        //vector.y = mesh->mNormals[i].y;
+        //vector.z = mesh->mNormals[i].z;
+        //vertex.Normal = vector;
 
-    cout << "Total Indices for mesh: " << indices.size() << endl;
-    for(unsigned int i = 0; i < indices.size(); i++)
-    {
-        cout << indices[i] << endl;
-    }
+        //// Texture Coordinates
+        //if(mesh->mTextureCoords[0])
+        //{
+            //glm::vec2 vec;
+            //vec.x = mesh->mTextureCoords[0][i].x;
+            //vec.y = mesh->mTextureCoords[0][i].y;
+            //vertex.TexCoords = vec;
+        //}
+        //else
+        //{
+            //vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+        //}
+
+        //vertices.push_back(vertex);
+    //}
+    //// Process indices
+    //for(GLuint i = 0; i < mesh->mNumFaces; i++)
+    //{
+        //aiFace face = mesh->mFaces[i];
+
+        //// Get all the indices from the face and store them
+        //for(GLuint j = 0; j < face.mNumIndices; j++)
+        //{
+            //indices.push_back(face.mIndices[j]);
+        //}
+    //}
+    //// Process Material
+    //if(mesh->mMaterialIndex >= 0)
+    //{
+        //aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+        //// Diffuse
+        //vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        //textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+        //// Specular
+        //vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+        //textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+    //}
+
+    //cout << "---- New Mesh Loaded ----" << endl;
+    //cout << "Total Vertices in mesh: " << vertices.size() << endl;
+    //for(unsigned int i = 0; i < vertices.size(); i++)
+    //{
+        //cout << "Position:" << endl;
+        //cout << vertices[i].Position.x  << " " << vertices[i].Position.y  << " "  << vertices[i].Position.z << endl;
+
+        //cout << "Normal:" << endl;
+        //cout << vertices[i].Normal.x    << " " << vertices[i].Normal.y    << " "  << vertices[i].Normal.z << endl;
+
+        //cout << "TexCoords:" << endl;
+        //cout << vertices[i].TexCoords.x << " " << vertices[i].TexCoords.y << endl << endl;
+    //}
+
+    //cout << "Total Indices for mesh: " << indices.size() << endl;
+    //for(unsigned int i = 0; i < indices.size(); i++)
+    //{
+        //cout << indices[i] << endl;
+    //}
 
     cout << "Total Textures loaded for mesh: " << textures.size() << endl;
     for(unsigned int i = 0; i < textures.size(); i++)
@@ -141,32 +170,32 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
-{
-    vector<Texture> textures;
-    for(GLuint i = 0; i < mat->GetTextureCount(type); i++)
-    {
-        aiString str;
-        mat->GetTexture(type, i, &str);
+//std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+//{
+    //vector<Texture> textures;
+    //for(GLuint i = 0; i < mat->GetTextureCount(type); i++)
+    //{
+        //aiString str;
+        //mat->GetTexture(type, i, &str);
 
-        // Check if already loaded
-        GLboolean skip = false;
-        for(GLuint j = 0; j < textures_loaded.size(); j++)
-        {
-            if(textures_loaded[j].GetPath() == str)
-            {
-                textures.push_back(textures_loaded[j]);
-            }
-            if(!skip)
-            {
-                Texture texture;
-                texture.Load(str.C_Str(), directory, true);
-                texture.SetType(typeName);
-                texture.SetPath(str);
-                textures.push_back(texture);
-            }
-        }
-    }
-    return textures;
-}
+        //// Check if already loaded
+        //GLboolean skip = false;
+        //for(GLuint j = 0; j < textures_loaded.size(); j++)
+        //{
+            //if(textures_loaded[j].GetPath() == str)
+            //{
+                //textures.push_back(textures_loaded[j]);
+            //}
+            //if(!skip)
+            //{
+                //Texture texture;
+                //texture.Load(str.C_Str(), directory, true);
+                //texture.SetType(typeName);
+                //texture.SetPath(str);
+                //textures.push_back(texture);
+            //}
+        //}
+    //}
+    //return textures;
+//}
 

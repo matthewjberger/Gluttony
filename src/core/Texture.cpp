@@ -69,7 +69,9 @@ void Texture::SetType(std::string _type)
 void Texture::Load(string path, string directory, bool genMipMaps)
 {
 
-    string fullPath = directory + '/' + fullPath;
+    // Store directory
+    string fullPath = directory + '/' + path;
+
     // The texture id
     mTextureID = 0;
 
@@ -107,10 +109,14 @@ void Texture::Load(string path, string directory, bool genMipMaps)
     // Set filtering
     SetFiltering(GL_LINEAR, GL_LINEAR);
 
+
     // Set path
     mPath = path;
 
     // Parameters
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

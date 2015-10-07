@@ -1,16 +1,12 @@
-#version 120
+attribute vec3 v_position;
+attribute vec2 v_color;
 
-attribute vec3 position;
-attribute vec3 normal;
-attribute vec2 texCoords;
-
-varying vec2 TexCoords;
-
+varying vec2 color;
 uniform mat4 mvpMatrix;
 
 void main(void)
 {
-   gl_Position = mvpMatrix * vec4(position, 1.0);
-   TexCoords = texCoords;
+   gl_Position = mvpMatrix * vec4(v_position, 1.0);
+   color = v_color;
 }
 

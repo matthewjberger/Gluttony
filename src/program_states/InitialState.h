@@ -1,5 +1,6 @@
 #include "../core/GlutProgram.h"
 #include "../core/Model.h"
+#include "../core/Texture.h"
 
 class InitialState : public ProgramState
 {
@@ -37,5 +38,8 @@ class InitialState : public ProgramState
         glm::mat4 projectionMatrix;
         glm::mat4 mvpMatrix;
 
+        VAO meshVAO;
+        VBO meshVBO;
 
+        Texture meshTexture;
 };

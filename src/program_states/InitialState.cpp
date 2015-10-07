@@ -1,4 +1,6 @@
 #include "InitialState.h"
+#include <iostream>
+using namespace std;
 
 InitialState* InitialState::instance = 0;
 InitialState::InitialState(){}
@@ -31,10 +33,40 @@ void InitialState::Initialize(GlutProgram* program)
             0.01f,                         // Distance to the near plane, normally a small value like this
             100.0f);                       // Distance to the far plane,
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    cout << "Positions:" << endl;
+    for(unsigned int i = 0; i < model->meshes.back().vertices.size(); i++)
+    {
+        cout << model->meshes.back().vertices[i].Position.x << " " <<  model->meshes.back().vertices[i].Position.y << " " << model->meshes.back().vertices[i].Position.z << endl;
+    }
+
+    meshVAO.Create();
+    meshVBO.Create();
+
+    meshVAO.Bind();
+    meshVBO.Bind();
+
+    meshVBO.AddData(&model->meshes.back().vertices.front(), sizeof(Vertex) * model->meshes.back().vertices.size());
+    meshVBO.UploadData();
+
+    meshVAO.EnableAttribute(0);
+    meshVAO.EnableAttribute(1);
+
+    meshVAO.ConfigureAttribute(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    meshVAO.ConfigureAttribute(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex,TexCoords));
+
+    meshTexture.Load("houseTexture.jpg", "Textures", true);
+
 }
 
 void InitialState::Finalize()
 {
+    meshVAO.Free();
+    meshVBO.Free();
+    meshTexture.Free();
+
     // Free Resources here
     shaderProgram.DeleteProgram();
 }
@@ -56,6 +88,14 @@ void InitialState::Keyboard(unsigned char key, int xPos, int yPos)
 void InitialState::Update()
 {
     // Update logic
+    static float angle = 0.0f;
+
+    angle += mainProgram->GetTimeDelta() * M_PI/2;
+
+    // Update logic
+    modelMatrix = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(1.0f, 1.0f, 1.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(0.2f, 0.2f, 0.2f));
+    mvpMatrix   =  projectionMatrix * viewMatrix * modelMatrix;
 }
 
 void InitialState::Render()
@@ -66,8 +106,13 @@ void InitialState::Render()
 
     shaderProgram.UseProgram();
     shaderProgram.SetUniform("mvpMatrix", &mvpMatrix);
+    shaderProgram.SetUniform("sampler2D", 0);
 
-    model->Draw(shaderProgram);
+    meshTexture.Bind(0);
+
+    meshVAO.Bind();
+    glDrawArrays(GL_TRIANGLES, 0, model->meshes.back().vertices.size());
+    meshVAO.Unbind();
 }
 
 void InitialState::Reshape(int newWidth, int newHeight)
