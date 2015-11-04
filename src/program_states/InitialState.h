@@ -1,6 +1,15 @@
 #include "../core/GlutProgram.h"
 #include "../core/Model.h"
 #include "../core/Texture.h"
+#include "../core/Menu.h"
+
+enum
+{
+    MENU_START = 0,
+    MENU_STOP  = 1,
+    MENU_QUIT  = 2,
+    MENU_PAUSE = 3
+};
 
 class InitialState : public ProgramState
 {
@@ -30,4 +39,7 @@ class InitialState : public ProgramState
         /**************************/
         /* Place state items here */
         /**************************/
+
+        Menu* contextMenu;
+
 };

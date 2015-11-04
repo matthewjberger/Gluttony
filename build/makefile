@@ -1,6 +1,6 @@
 # Linux
-CC=g++
-LIBS= -lglut -lGLEW -lGL -lSOIL -lassimp
+CC = g++
+LIBS = -lglut -lGLEW -lGL -lSOIL -lassimp -lBulletDynamics -lBulletSoftBody -lBulletCollision -lLinearMath
 
 # For Macs uncomment the next line and comment out the previous one
 #CC=clang++
@@ -8,13 +8,13 @@ LIBS= -lglut -lGLEW -lGL -lSOIL -lassimp
 # Assuming you want to use a recent compiler
 
 # Output directory
-OUT_DIR= ../bin/
+OUT_DIR = ../bin/
 
 # Executable file
-EXE = Gluttony
+EXE = AirHockey
 
 # Compiler flags
-CXXFLAGS= -g -Wall -std=c++0x
+CXXFLAGS= -g -w -std=c++0x
 
 # Source directory
 SRC_DIR=../src
@@ -26,13 +26,13 @@ SRC= $(shell find $(SRC_DIR) -name *.cpp)
 OBJ = $(SRC:%.cpp=%.o)
 
 # Extra include paths
-INCLUDE_PATHS=#-I/usr/include/freetype2
+INCLUDE_PATHS=-I/usr/include/bullet
 
 all: $(EXE)
 
 $(EXE): $(OBJ)
 	mkdir -p $(OUT_DIR) \
-	&& $(CC) $(OBJ) -o $(OUT_DIR)$(EXE) $(LIBS) \
+	&& $(CC) $(OBJ) $(INCLUDE_PATHS) -o $(OUT_DIR)$(EXE) $(LIBS) \
 	&& make clean
 
 %.o: %.cpp
