@@ -33,7 +33,6 @@ all: $(EXE)
 $(EXE): $(OBJ)
 	mkdir -p $(OUT_DIR) \
 	&& $(CC) $(OBJ) $(INCLUDE_PATHS) -o $(OUT_DIR)$(EXE) $(LIBS) \
-	&& make clean
 
 %.o: %.cpp
 	g++ -c $(CXXFLAGS) $(INCLUDE_PATHS)  $< -o $@

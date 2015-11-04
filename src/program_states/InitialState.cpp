@@ -8,8 +8,7 @@ InitialState::~InitialState(){}
 void InitialState::Pause(){}
 void InitialState::Resume(){}
 InitialState* InitialState::GetInstance()
-{
-    if(instance == 0) instance = new InitialState();
+{ if(instance == 0) instance = new InitialState();
     return instance;
 }
 
@@ -54,7 +53,12 @@ void InitialState::Initialize(GlutProgram* program)
     contextMenu->AttachToMouseRight();
 
     camera = new Camera();
-    camera->SetPosition(glm::vec3(0.0f, 10.0f, 0.0f), 0, -1.55 );
+
+    // Player view
+    camera->LookAt(glm::vec3(5.0f, 1.0f, 0.01f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
+
+    //camera->LookAt(glm::vec3(5.0f, 2.0f, 0.01f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
+    //camera->LookAt(glm::vec3(1.0f, 5.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
 
     shaderProgram.CreateProgram();
     shaderProgram.AddShaderFromFile("Shaders/modelVert.glsl", GL_VERTEX_SHADER);
@@ -64,9 +68,33 @@ void InitialState::Initialize(GlutProgram* program)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    //physicsManager = new PhysicsManager();
+    physicsManager = new PhysicsManager();
 
-    model = new Model("Assets/hockey/Table.obj", "Assets/hockey/wood.jpg", true);
+    // Table collision shapes
+    btCollisionShape* bottom = new btStaticPlaneShape(btVector3( 0, 1,  0), 0.85);
+    btCollisionShape* right  = new btStaticPlaneShape(btVector3( 0, 0,  1), -1.7);
+    btCollisionShape* left   = new btStaticPlaneShape(btVector3( 0, 0, -1), -1.7);
+    btCollisionShape* front  = new btStaticPlaneShape(btVector3(-1, 0,  0), -3.0);
+    btCollisionShape* back   = new btStaticPlaneShape(btVector3( 1, 0,  0), -3.0);
+
+    // Paddle and Puck collision shape
+    btCollisionShape* cylinder  = new btCylinderShape(btVector3(0.2, 0.1, 0.2));
+
+    // Add rigid bodies
+    physicsManager->AddRigidBody(cylinder, btVector3(0.0, 0.0, 0.0), 2); // puck
+    physicsManager->AddRigidBody(cylinder, btVector3(-2.0, 0.0, 0.0), 2); // paddle 1
+    physicsManager->AddRigidBody(cylinder, btVector3(2.0, 0.0, 0.0), 2); // paddle 2
+    physicsManager->AddRigidBody(bottom, btVector3(0, -1, 0));
+    physicsManager->AddRigidBody(right,  btVector3(0, -1, 0));
+    physicsManager->AddRigidBody(left,   btVector3(0, -1, 0));
+    physicsManager->AddRigidBody(front,  btVector3(0, -1, 0));
+    physicsManager->AddRigidBody(back,   btVector3(0, -1, 0));
+
+    models[0] = new Model("Assets/hockey/table.obj",  "Assets/hockey/wood.jpg", true);
+    models[1] = new Model("Assets/hockey/puck.obj",   "Assets/hockey/puck.jpg", true);
+    models[2] = new Model("Assets/hockey/paddle.obj", "Assets/hockey/whiteplastic.jpg", true);
+
+    models[1]->Rotate(M_PI, glm::vec3(1,0,0));
 
     skybox = new Skybox("Assets/skybox/right.jpg",
             "Assets/skybox/left.jpg",
@@ -82,15 +110,17 @@ void InitialState::Finalize()
     // Free Resources here
     shaderProgram.DeleteProgram();
 
-    model->Free();
+    models[0]->Free();
+    models[1]->Free();
+    models[2]->Free();
 
     delete camera;
     delete skybox;
-    //delete physicsManager;
+    delete physicsManager;
 
     camera = NULL;
     skybox = NULL;
-    //physicsManager = NULL;
+    physicsManager = NULL;
 }
 
 void InitialState::Mouse(int button, int state, int xPos, int yPos)
@@ -124,7 +154,7 @@ void InitialState::Update()
     }
 
     camera->Update();
-    //physicsManager->Update();
+    physicsManager->Update();
 }
 
 void InitialState::Render()
@@ -138,8 +168,21 @@ void InitialState::Render()
     skybox->Draw(camera->projectionMatrix, camera->viewMatrix);
 
     shaderProgram.UseProgram();
-    shaderProgram.SetUniform("mvpMatrix", camera->GetMVP(model->GetModelMatrix()));
-    model->Draw();
+
+    // Draw table
+    shaderProgram.SetUniform("mvpMatrix", camera->GetMVP(models[0]->GetModelMatrix()));
+    models[0]->Draw();
+
+    // Draw puck
+    shaderProgram.SetUniform("mvpMatrix", camera->GetMVP(physicsManager->GetModelMatrixAtIndex(0)));
+    models[1]->Draw();
+
+    // Draw paddles
+    shaderProgram.SetUniform("mvpMatrix", camera->GetMVP(physicsManager->GetModelMatrixAtIndex(1)));
+    models[2]->Draw();
+
+    shaderProgram.SetUniform("mvpMatrix", camera->GetMVP(physicsManager->GetModelMatrixAtIndex(2)));
+    models[2]->Draw();
 
     PrintText(0, 0,  "Player 1 Score: 0");
     PrintText(490, 0, "Player 2 Score: 0");

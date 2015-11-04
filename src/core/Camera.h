@@ -13,6 +13,8 @@ class Camera
         void SetPosition(glm::vec3 position, float horizontalAngle = M_PI, float verticalAngle =  0.0f);
         void Update();
 
+        void LookAt(glm::vec3 position, glm::vec3 focusPoint, glm::vec3 up);
+
         // Membor Accessors
         float GetPitchSensitivity();
         void  SetPitchSensitivity(float newSens);

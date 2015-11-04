@@ -48,7 +48,7 @@ class InitialState : public ProgramState
         Camera* camera;
         ShaderProgram shaderProgram;
 
-        Model* model;
+        Model* models[3];
         Skybox* skybox;
 
 };

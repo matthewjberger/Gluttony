@@ -19,7 +19,7 @@ class PhysicsManager
         void AddRigidBody(btCollisionShape* collisionShape,
                           btVector3 origin     = btVector3(0,0,0),
                           btScalar mass        = btScalar(0),
-                          btScalar restitution = btScalar(1.0f),
+                          btScalar restitution = btScalar(0.4f),
                           btVector3 inertia    = btVector3(0.0f, 0.0f, 0.0f),
                           bool kinematic       = false);
 
