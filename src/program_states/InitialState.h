@@ -2,6 +2,9 @@
 #include "../core/Model.h"
 #include "../core/Texture.h"
 #include "../core/Menu.h"
+#include "../core/PhysicsManager.h"
+#include "../core/Camera.h"
+#include "../core/Skybox.h"
 
 enum
 {
@@ -41,5 +44,11 @@ class InitialState : public ProgramState
         /**************************/
 
         Menu* contextMenu;
+        PhysicsManager* physicsManager;
+        Camera* camera;
+        ShaderProgram shaderProgram;
+
+        Model* model;
+        Skybox* skybox;
 
 };

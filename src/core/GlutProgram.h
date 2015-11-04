@@ -59,6 +59,7 @@ class GlutProgram
         // Internal Timer
         std::chrono::time_point<std::chrono::high_resolution_clock> previousTime, currentTime;
         float GetTimeDelta();
+        glm::vec2 GetMousePosition();
 
     private:
         static GlutProgram *instance;
@@ -70,6 +71,7 @@ class GlutProgram
         int screenHeight;
 
         std::string title;
+        glm::vec2 mousePosition;
 
 };
 

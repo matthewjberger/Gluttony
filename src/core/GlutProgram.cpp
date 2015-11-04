@@ -19,7 +19,7 @@ void UpdateCallback()
 
 void MouseCallback(int button, int state, int xPos, int yPos)
 {
-    GlutProgram::GetInstance()->Mouse(button, state, xPos, yPos);
+   GlutProgram::GetInstance()->Mouse(button, state, xPos, yPos);
 }
 
 void KeyboardCallback(unsigned char key, int xPos, int yPos)
@@ -138,6 +138,9 @@ void GlutProgram::DestroyInstance()
 
 void GlutProgram::Mouse(int button, int state, int xPos, int yPos)
 {
+    mousePosition.x = xPos;
+    mousePosition.y = yPos;
+
     if(!ProgramStates.empty())
         ProgramStates.back()->Mouse(button, state, xPos, yPos);
 }
@@ -232,5 +235,10 @@ float GlutProgram::GetTimeDelta()
     previousTime         = std::chrono::high_resolution_clock::now();
 
     return returnValue;
+}
+
+glm::vec2 GlutProgram::GetMousePosition()
+{
+    return mousePosition;
 }
 
