@@ -11,7 +11,9 @@ enum
     MENU_START = 0,
     MENU_STOP  = 1,
     MENU_QUIT  = 2,
-    MENU_PAUSE = 3
+    MENU_PAUSE = 3,
+    MENU_RAISED_VIEW = 4,
+    MENU_PLAYER_VIEW = 5
 };
 
 class InitialState : public ProgramState
@@ -24,6 +26,7 @@ class InitialState : public ProgramState
         void Resume();
 
         void Mouse(int button, int state, int xPos, int yPos);
+        void MousePassive(int xPos, int yPos);
         void Keyboard(unsigned char key, int xPos, int yPos);
         void Reshape(int newWidth, int newHeight);
         void Render();
@@ -50,5 +53,7 @@ class InitialState : public ProgramState
 
         Model* models[3];
         Skybox* skybox;
+
+        int prevX, prevY;
 
 };

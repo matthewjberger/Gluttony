@@ -22,6 +22,11 @@ void MouseCallback(int button, int state, int xPos, int yPos)
    GlutProgram::GetInstance()->Mouse(button, state, xPos, yPos);
 }
 
+void MousePassiveCallback(int xPos, int yPos)
+{
+   GlutProgram::GetInstance()->MousePassive(xPos, yPos);
+}
+
 void KeyboardCallback(unsigned char key, int xPos, int yPos)
 {
     GlutProgram::GetInstance()->Keyboard(key, xPos, yPos);
@@ -67,11 +72,12 @@ bool GlutProgram::Initialize( int argc, char **argv, int width, int height, int 
     }
 
     // Setup GLUT callbacks
-    glutDisplayFunc(RenderCallback);    // Called when its time to display
-    glutReshapeFunc(ReshapeCallback);   // Called if the window is resized
-    glutIdleFunc(UpdateCallback);       // Called if there is nothing else to do
-    glutKeyboardFunc(KeyboardCallback); // Called if there is keyboard input
-    glutMouseFunc(MouseCallback);       // Called if there is mouse input
+    glutDisplayFunc(RenderCallback);             // Called when its time to display
+    glutReshapeFunc(ReshapeCallback);            // Called if the window is resized
+    glutIdleFunc(UpdateCallback);                // Called if there is nothing else to do
+    glutKeyboardFunc(KeyboardCallback);          // Called if there is keyboard input
+    glutMouseFunc(MouseCallback);                // Called if there is mouse input
+    glutPassiveMotionFunc(MousePassiveCallback); // Called if there is passive mouse input
 
     return true;
 }
@@ -144,6 +150,16 @@ void GlutProgram::Mouse(int button, int state, int xPos, int yPos)
     if(!ProgramStates.empty())
         ProgramStates.back()->Mouse(button, state, xPos, yPos);
 }
+
+void GlutProgram::MousePassive(int xPos, int yPos)
+{
+    mousePosition.x = xPos;
+    mousePosition.y = yPos;
+
+    if(!ProgramStates.empty())
+        ProgramStates.back()->MousePassive(xPos, yPos);
+}
+
 
 void GlutProgram::Keyboard(unsigned char key, int xPos, int yPos)
 {

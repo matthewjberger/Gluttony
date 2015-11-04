@@ -1,7 +1,6 @@
 #include "InitialState.h"
 #include <iostream>
 using namespace std;
-
 InitialState* InitialState::instance = 0;
 InitialState::InitialState(){}
 InitialState::~InitialState(){}
@@ -21,7 +20,9 @@ void InitialState::Reshape(int newWidth, int newHeight)
     mainProgram->SetScreenHeight(newHeight);
 
     glViewport(0, 0, mainProgram->GetScreenWidth(), mainProgram->GetScreenHeight());
+
 }
+
 void PrintText(float x, float y, string text, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f))
 {
     GlutProgram* mainProgram = GlutProgram::GetInstance();
@@ -45,20 +46,24 @@ void InitialState::Initialize(GlutProgram* program)
     // Grab the main program instance for use in the program state
     mainProgram = program;
 
+    prevX = program->GetScreenWidth()/2;
+    prevY = program->GetScreenHeight()/2;
+
+    glutWarpPointer(prevX, prevY);
+
     contextMenu = Menu::GetInstance();
     contextMenu->AddEntry("Start", MENU_START );
     contextMenu->AddEntry("Stop",  MENU_STOP  );
     contextMenu->AddEntry("Quit",  MENU_QUIT  );
     contextMenu->AddEntry("Pause", MENU_PAUSE );
+    contextMenu->AddEntry("Raised View", MENU_RAISED_VIEW);
+    contextMenu->AddEntry("Player View", MENU_PLAYER_VIEW);
     contextMenu->AttachToMouseRight();
 
     camera = new Camera();
 
-    // Player view
-    camera->LookAt(glm::vec3(5.0f, 1.0f, 0.01f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-
-    //camera->LookAt(glm::vec3(5.0f, 2.0f, 0.01f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
-    //camera->LookAt(glm::vec3(1.0f, 5.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
+    // Raised view
+    camera->LookAt(glm::vec3(5.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
 
     shaderProgram.CreateProgram();
     shaderProgram.AddShaderFromFile("Shaders/modelVert.glsl", GL_VERTEX_SHADER);
@@ -128,6 +133,18 @@ void InitialState::Mouse(int button, int state, int xPos, int yPos)
     // Handle Mouse input
 }
 
+void InitialState::MousePassive(int xPos, int yPos)
+{
+    GlutProgram* program = GlutProgram::GetInstance();
+    float x = float(xPos) / float(program->GetScreenWidth()  - 0.5) * 2;
+    float y = float(yPos) / float(program->GetScreenHeight() - 0.5) * 2;
+    float xOffset = x - prevX;
+    float yOffset = y - prevY;
+    prevX = x;
+    prevY = y;
+    physicsManager->ApplyForceAtIndex(btVector3(xOffset * -0.01, 0.0, yOffset * -0.01), 2);
+}
+
 void InitialState::Keyboard(unsigned char key, int xPos, int yPos)
 {
     // Handle keyboard input
@@ -144,13 +161,27 @@ void InitialState::Update()
     {
         case MENU_START:
             break;
+
         case MENU_STOP:
             break;
+
         case MENU_QUIT:
             mainProgram->Quit();
             break;
         case MENU_PAUSE:
             break;
+
+        case MENU_RAISED_VIEW:
+            // Raised view
+            camera->LookAt(glm::vec3(5.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
+
+            break;
+
+        case MENU_PLAYER_VIEW:
+            // Player view
+            camera->LookAt(glm::vec3(5.0f, 1.0f, 0.01f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0));
+            break;
+
     }
 
     camera->Update();

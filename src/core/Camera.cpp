@@ -160,6 +160,6 @@ void Camera::SetPosition(glm::vec3 position, float horizontalAngle, float vertic
 void Camera::LookAt(glm::vec3 position, glm::vec3 focusPoint, glm::vec3 up)
 {
     this->position = position;
-    viewMatrix = glm::lookAt(position, focusPoint, up);
+    this->viewMatrix = glm::lookAt(position, focusPoint, up);
 }
 
